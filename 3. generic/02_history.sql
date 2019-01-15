@@ -39,16 +39,16 @@ $$;
 
 CREATE OR REPLACE FUNCTION function_insert_history() RETURNS TRIGGER AS $$
 DECLARE
-	_err_context text;
-	_history_schema_name text;
-	_history_table_name text;
-	_model_schema_name text;
-	_model_table_name text;
+  _err_context text;
+  _history_schema_name text;
+  _history_table_name text;
+  _model_schema_name text;
+  _model_table_name text;
 BEGIN
     _history_schema_name := 'history';
    	_history_table_name := TG_TABLE_NAME;
   	_model_schema_name := TG_TABLE_SCHEMA;
- 	_model_table_name := TG_TABLE_NAME;
+ 	  _model_table_name := TG_TABLE_NAME;
 	IF (TG_OP = 'INSERT') then
     	--RAISE EXCEPTION 'Testing [%!]', create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, NEW, 'I'));
         EXECUTE(create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, NEW, 'I'));
@@ -65,11 +65,11 @@ BEGIN
     END IF;
 	EXCEPTION
 	WHEN OTHERS THEN
-	    GET STACKED DIAGNOSTICS _err_context = PG_EXCEPTION_CONTEXT;
+	  GET STACKED DIAGNOSTICS _err_context = PG_EXCEPTION_CONTEXT;
 		RAISE EXCEPTION 'Error context: %; Error name: %; Error state: %', _err_context, SQLERRM, sqlstate
-		USING HINT = format('Check history table [%s.%s] of table [%s.%s]', _history_schema_name, _history_table_name, _model_schema_name, _model_table_name),
-		SCHEMA = _history_schema_name,
-		TABLE = _history_table_name;
+		  USING HINT = format('Check history table [%s.%s] of table [%s.%s]', _history_schema_name, _history_table_name, _model_schema_name, _model_table_name),
+		  SCHEMA = _history_schema_name,
+		  TABLE = _history_table_name;
 
 END;
 $$ LANGUAGE plpgsql;
