@@ -10,7 +10,7 @@ CREATE TABLE history.example_one (
   LIKE model.example_one
 );
 
-CREATE OR REPLACE FUNCTION create_insert_history_statement(_schemaname text, _tablename text, _row anyelement, operation history.operation) RETURNS text
+CREATE OR REPLACE FUNCTION create_insert_history_statement(_schemaname text, _tablename text, _row anyelement, _operation history.operation) RETURNS text
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -33,25 +33,25 @@ LOOP
 	    _values := _values || format('%L', _value);
 	END IF;
 END LOOP;
-RETURN format('INSERT INTO history.%s (_user, _operation, _operation_at, %s) VALUES (%L, %L, %L, %s)', _tablename, array_to_string(_columns, ','), user, operation, now(), array_to_string(_values, ','));
+RETURN format('INSERT INTO history.%s (_user, _operation, _operation_at, %s) VALUES (%L, %L, %L, %s)', _tablename, array_to_string(_columns, ','), user, _operation, now(), array_to_string(_values, ','));
 END;
 $$;
 
 CREATE OR REPLACE FUNCTION function_insert_history() RETURNS TRIGGER AS $$
 begin
-    IF (TG_OP = 'DELETE') then
+    IF (TG_OP = 'INSERT') then
     	--RAISE EXCEPTION 'Testing [%!]', create_insert_statement(TG_TABLE_SCHEMA, TG_TABLE_NAME, OLD);
-        EXECUTE(create_insert_history_statement(TG_TABLE_SCHEMA, TG_TABLE_NAME, OLD, 'I'));
-        RETURN OLD;
+        EXECUTE(create_insert_history_statement(TG_TABLE_SCHEMA, TG_TABLE_NAME, NEW, 'I'));
+        RETURN NEW;
     ELSIF (TG_OP = 'UPDATE') then
       -- catch errors
     	--RAISE EXCEPTION 'Testing [%!]', create_insert_statement(TG_TABLE_SCHEMA, TG_TABLE_NAME, NEW);
         EXECUTE(create_insert_history_statement(TG_TABLE_SCHEMA, TG_TABLE_NAME, NEW, 'U'));
         RETURN NEW;
-    ELSIF (TG_OP = 'INSERT') then
+    ELSIF (TG_OP = 'DELETE') then
     	--RAISE EXCEPTION 'Testing [%!]', create_insert_statement(TG_TABLE_SCHEMA, TG_TABLE_NAME, NEW);
-		EXECUTE(create_insert_history_statement(TG_TABLE_SCHEMA, TG_TABLE_NAME, NEW, 'D'));
-        RETURN NEW;
+		EXECUTE(create_insert_history_statement(TG_TABLE_SCHEMA, TG_TABLE_NAME, OLD, 'D'));
+        RETURN OLD;
     END IF;
 END;
 $$ LANGUAGE plpgsql;

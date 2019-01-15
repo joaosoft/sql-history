@@ -14,13 +14,13 @@ CREATE OR REPLACE FUNCTION function_example_one_history() RETURNS TRIGGER AS $$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO history.example_one VALUES(user, 'I', now(), OLD.*);
-        RETURN OLD;
+        RETURN NEW;
     ELSIF (TG_OP = 'UPDATE') THEN
         INSERT INTO history.example_one VALUES(user, 'U', now(), NEW.*);
         RETURN NEW;
     ELSIF (TG_OP = 'DELETE') THEN
         INSERT INTO history.example_one VALUES(user, 'D', now(), NEW.*);
-        RETURN NEW;
+        RETURN OLD;
     END IF;
 END;
 $$ LANGUAGE plpgsql;
