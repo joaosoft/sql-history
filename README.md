@@ -6,9 +6,23 @@ Postgres history tables approach's
 ###### If i miss something or you have something interesting, please be part of this project. Let me know! My contact is at the end.
 
 ## Approach's
-1. defining columns
-2. without defining columns
-3. generic
+### 1. defining columns
+###### Pros: 
+* Fix the cases that we have columns with a wrong order.  
+###### Cons: 
+* Because having the all the fields defined in the trigger, it could happen having the history table with less fields than it should and the error would be hidden.
+
+### 2. without defining columns
+###### Pros: 
+* We dont need to re-define the procedure to insert in the history table every time we add a new column.  
+###### Cons: 
+* Can happen that we have columns with a wrong order.
+
+### 3. generic
+###### Pros: 
+* We just need to define a trigger function  
+###### Cons: 
+* It takes more time because we need to create the insert statement with the columns definied in the table in the correct order
 
 ## Known issues
 
