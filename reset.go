@@ -12,8 +12,10 @@ func main() {
 	driver := "postgres"
 	dataSource := "postgres://postgres:postgres@localhost:7100/foursource?sslmode=disable"
 
-	cleanTables := map[string][]string{"history": []string{"example_one", "example_two", "example_three"},
-		"model": []string{"example_one", "example_two", "example_three"}}
+	cleanTables := map[string][]string{
+		"model":   []string{"example_zero", "example_one", "example_two", "example_three", "example_four"},
+		"history": []string{"example_one", "example_two", "example_three", "example_four"},
+	}
 
 	log.Printf("connecting database with driver [ %s ] and data source [ %s ]", driver, dataSource)
 	db, err := sql.Open(driver, dataSource)

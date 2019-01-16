@@ -62,6 +62,21 @@ PASS
 ok  	sql-history/3.generic	90.161s
 ````
 
+### 4. generic with improvements
+###### Pros: 
+* We just need to define a trigger function  
+###### Cons: 
+* It takes more time because we need to create the insert statement with the columns definied in the table in the correct order
+###### Benchmark: 
+````
+goos: darwin
+goarch: amd64
+pkg: sql-history/4.generic-with-improvement
+Benchmark-4   	       1	36915125535 ns/op
+PASS
+ok  	sql-history/4.generic-with-improvement	36.936s
+````
+
 ## Known issues
 
 ## Follow me at
