@@ -1,0 +1,6 @@
+goos: darwin
+goarch: amd64
+pkg: sql-history/1.defining-columns
+Benchmark-4   	       1	29561407891 ns/op
+PASS
+ok  	sql-history/1.defining-columns	29.583s

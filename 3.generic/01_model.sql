@@ -11,15 +11,15 @@ CREATE OR REPLACE FUNCTION model.function_updated_at()
 
 
 -- PROCESS
-CREATE TABLE model.example_one (
-  id_example_one                  SERIAL,
+CREATE TABLE model.example_three (
+  id_example_three                  SERIAL,
   name                            TEXT NOT NULL,
   description                     TEXT,
   "array"                         INTEGER ARRAY,
   created_at                      TIMESTAMP DEFAULT NOW(),
   updated_at                      TIMESTAMP DEFAULT NOW(),
-  CONSTRAINT example_one_pkey     PRIMARY KEY (id_example_one)
+  CONSTRAINT example_three_pkey     PRIMARY KEY (id_example_three)
 );
 
-CREATE TRIGGER trigger_model_example_one_updated_at BEFORE UPDATE
-  ON model.example_one FOR EACH ROW EXECUTE PROCEDURE model.function_updated_at();
+CREATE TRIGGER trigger_model_example_three_updated_at BEFORE UPDATE
+  ON model.example_three FOR EACH ROW EXECUTE PROCEDURE model.function_updated_at();

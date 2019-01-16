@@ -1,0 +1,6 @@
+goos: darwin
+goarch: amd64
+pkg: sql-history/3.generic
+Benchmark-4   	       1	90137351091 ns/op
+PASS
+ok  	sql-history/3.generic	90.161s

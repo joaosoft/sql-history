@@ -2,12 +2,12 @@ CREATE SCHEMA history;
 
 CREATE TYPE history.operation AS ENUM ('I', 'U', 'D');
 
-CREATE TABLE history.example_one (
+CREATE TABLE history.example_three (
   _id_history SERIAL    PRIMARY KEY,
   _user                 TEXT NOT NULL,
   _operation operation  NOT NULL,
   _operation_at         TIMESTAMP DEFAULT NOW(),
-  LIKE model.example_one
+  LIKE model.example_three
 );
 
 CREATE OR REPLACE FUNCTION create_insert_history_statement(_history_schema_name text, _history_table_name text, _model_schema_name text, _model_table_name text, _row anyelement, _operation history.operation) RETURNS text
@@ -74,6 +74,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_example_one_history
-AFTER INSERT OR UPDATE OR DELETE ON model.example_one
+CREATE TRIGGER trigger_example_three_history
+AFTER INSERT OR UPDATE OR DELETE ON model.example_three
     FOR EACH ROW EXECUTE PROCEDURE function_insert_history();
