@@ -1,4 +1,4 @@
-package __defining_columns
+package __without_history
 
 import (
 	"database/sql"
