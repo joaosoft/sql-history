@@ -1,6 +1,6 @@
 goos: darwin
 goarch: amd64
 pkg: sql-history/2.without-defining-columns
-Benchmark-4   	       1	23370251187 ns/op
+Benchmark-4   	       1	28070046002 ns/op
 PASS
-ok  	sql-history/2.without-defining-columns	23.398s
+ok  	sql-history/2.without-defining-columns	28.093s

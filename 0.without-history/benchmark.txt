@@ -1,0 +1,6 @@
+goos: darwin
+goarch: amd64
+pkg: sql-history/0.simple-table
+Benchmark-4   	       1	23379745112 ns/op
+PASS
+ok  	sql-history/0.simple-table	23.398s
