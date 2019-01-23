@@ -1,0 +1,7 @@
+2019/01/23 11:24:17 connecting database with driver [ postgres ] and data source [ postgres://postgres:postgres@localhost:7100/foursource?sslmode=disable ]
+goos: darwin
+goarch: amd64
+pkg: sql-history/5.tests
+Benchmark-4   	       1	59692435669 ns/op
+PASS
+ok  	sql-history/5.tests	59.708s

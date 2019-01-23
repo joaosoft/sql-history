@@ -77,6 +77,22 @@ PASS
 ok  	sql-history/4.generic-with-improvement	36.936s
 ````
 
+### 5. generic with improvement with joins
+###### Pros: 
+* We just need to define a trigger function  
+###### Cons: 
+* It takes more time because we need to create the insert statement with the columns defined in the table in the correct order
+###### Benchmark: 
+````
+2019/01/23 11:24:17 connecting database with driver [ postgres ] and data source [ postgres://postgres:postgres@localhost:7100/foursource?sslmode=disable ]
+goos: darwin
+goarch: amd64
+pkg: sql-history/5.tests
+Benchmark-4   	       1	59692435669 ns/op
+PASS
+ok  	sql-history/5.tests	59.708s
+````
+
 ## Known issues
 
 ## Follow me at
