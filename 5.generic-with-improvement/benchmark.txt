@@ -1,0 +1,6 @@
+goos: darwin
+goarch: amd64
+pkg: sql-history/5.generic-with-improvement
+Benchmark-4   	       1	36915125535 ns/op
+PASS
+ok  	sql-history/5.generic-with-improvement	36.936s

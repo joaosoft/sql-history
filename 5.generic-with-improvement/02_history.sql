@@ -20,14 +20,12 @@ DECLARE
 	_values text[];
 BEGIN
 FOR _rec IN
-    SELECT pg_attribute.attname AS column_name
-    FROM pg_class
-    JOIN pg_attribute ON pg_attribute.attrelid = pg_class.oid
-    JOIN pg_catalog.pg_namespace ON pg_namespace.oid = pg_class.relnamespace
-    WHERE  pg_namespace.nspname = _model_schema_name AND pg_class.relname = _model_table_name
-    AND    pg_attribute.attnum > 0
-    AND    NOT pg_attribute.attisdropped
-    ORDER  BY pg_attribute.attnum
+    SELECT attname AS column_name
+    FROM   pg_attribute
+    WHERE  attrelid = (_model_schema_name || '.' || _model_table_name)::regclass
+    AND    attnum > 0
+    AND    NOT attisdropped
+    ORDER  BY attnum
 LOOP
 	IF substring(_rec.column_name, 1, 1) <> '_' THEN
 		EXECUTE 'SELECT ($1).' || _rec.column_name INTO STRICT _value USING _row;
@@ -35,7 +33,7 @@ LOOP
 	    _values := _values || format('%L', _value);
 	END IF;
 END LOOP;
-RETURN format('INSERT INTO %s.%s (_user, _operation, _operation_at, %s) VALUES (%L, %L, %L, %s)', _history_schema_name, _history_table_name, array_to_string(_columns, ','), USER, _operation, NOW(), array_to_string(_values, ','));
+RETURN format('INSERT INTO "%s"."%s" (_user, _operation, _operation_at, %s) VALUES (%L, %L, %L, %s)', _history_schema_name, _history_table_name, array_to_string(_columns, ','), USER, _operation, NOW(), array_to_string(_values, ','));
 END;
 $$;
 
@@ -52,15 +50,16 @@ BEGIN
   	_model_schema_name := TG_TABLE_SCHEMA;
  	  _model_table_name := TG_TABLE_NAME;
 	IF (TG_OP = 'INSERT') THEN
-    	--RAISE NOTICE 'Testing [%]', create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, NEW, 'I');
+    	--RAISE EXCEPTION 'Testing [%!]', create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, NEW, 'I'));
         EXECUTE(create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, NEW, 'I'));
         RETURN NEW;
     ELSIF (TG_OP = 'UPDATE') THEN
-    	--RAISE EXCEPTION 'Testing [%]', create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, NEW, 'U');
+      -- catch errors
+    	--RAISE EXCEPTION 'Testing [%!]', create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, NEW, 'U');
         EXECUTE(create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, NEW, 'U'));
         RETURN NEW;
     ELSIF (TG_OP = 'DELETE') THEN
-    	--RAISE EXCEPTION 'Testing [%]', create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, OLD, 'D');
+    	--RAISE EXCEPTION 'Testing [%!]', create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, OLD, 'D');
         EXECUTE(create_insert_history_statement(_history_schema_name, _history_table_name, _model_schema_name, _model_table_name, OLD, 'D'));
         RETURN OLD;
     END IF;

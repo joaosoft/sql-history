@@ -12,12 +12,12 @@ import (
 
 func Benchmark(b *testing.B) {
 	driver := "postgres"
-	dataSource := "postgres://postgres:postgres@localhost:7100/foursource?sslmode=disable"
+	dataSource := "postgres://postgres:postgres@localhost:7100/sixsource?sslmode=disable"
 	expectedAffectedRows := 10000
 	historySchemaName := "history"
-	historyTableName := "example_five"
+	historyTableName := "example_six"
 	modelSchemaName := "model"
-	modelTableName := "example_five"
+	modelTableName := "example_six"
 
 	log.Printf("connecting database with driver [ %s ] and data source [ %s ]", driver, dataSource)
 	db, err := sql.Open(driver, dataSource)
@@ -33,7 +33,7 @@ func Benchmark(b *testing.B) {
 	count := 0
 	for i := 1; i <= expectedAffectedRows; i++ {
 		result, err := tx.Exec(
-			fmt.Sprintf(`INSERT INTO %s.%s (id_example_five, name, description) 
+			fmt.Sprintf(`INSERT INTO %s.%s (id_example_six, name, description) 
 								VALUES ($1, $2, $3)`, modelSchemaName, modelTableName), i, fmt.Sprintf("name %d", i), fmt.Sprintf("name %d", i))
 		if err != nil {
 			log.Fatalf("error inserting on table %s.%s: %s", modelSchemaName, modelTableName, err.Error())
@@ -52,7 +52,7 @@ func Benchmark(b *testing.B) {
 		log.Fatalf("error commiting database transaction: %s", err.Error())
 	}
 
-	row := db.QueryRow(fmt.Sprintf("SELECT COUNT(id_example_five) FROM %s.%s", historySchemaName, historyTableName))
+	row := db.QueryRow(fmt.Sprintf("SELECT COUNT(id_example_six) FROM %s.%s", historySchemaName, historyTableName))
 
 	err = row.Scan(&count)
 	if err != nil {

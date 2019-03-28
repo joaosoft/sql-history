@@ -62,22 +62,7 @@ PASS
 ok  	sql-history/3.generic	90.161s
 ````
 
-### 4. generic with improvements
-###### Pros: 
-* We just need to define a trigger function  
-###### Cons: 
-* It takes more time because we need to create the insert statement with the columns definied in the table in the correct order
-###### Benchmark: 
-````
-goos: darwin
-goarch: amd64
-pkg: sql-history/4.generic-with-improvement
-Benchmark-4   	       1	36915125535 ns/op
-PASS
-ok  	sql-history/4.generic-with-improvement	36.936s
-````
-
-### 5. generic with improvement with joins
+### 4. generic with improvement with joins
 ###### Pros: 
 * We just need to define a trigger function  
 ###### Cons: 
@@ -87,11 +72,44 @@ ok  	sql-history/4.generic-with-improvement	36.936s
 2019/01/23 11:24:17 connecting database with driver [ postgres ] and data source [ postgres://postgres:postgres@localhost:7100/foursource?sslmode=disable ]
 goos: darwin
 goarch: amd64
-pkg: sql-history/5.tests
+pkg: sql-history/4.generic-with-improvement-with-joins
 Benchmark-4   	       1	59692435669 ns/op
 PASS
-ok  	sql-history/5.tests	59.708s
+ok  	sql-history/4.generic-with-improvement-with-joins 59.708s
 ````
+
+### 5. generic with improvements
+###### Pros: 
+* We just need to define a trigger function  
+###### Cons: 
+* It takes more time because we need to create the insert statement with the columns definied in the table in the correct order
+###### Benchmark: 
+````
+goos: darwin
+goarch: amd64
+pkg: sql-history/5.generic-with-improvement
+Benchmark-4   	       1	36915125535 ns/op
+PASS
+ok  	sql-history/5.generic-with-improvement	36.936s
+````
+
+### 6. generic with improvements automatized
+###### Pros: 
+* We just need to call a function to create the history process
+Example: ```SELECT history.create_history_table('history', 'example_six', 'model', 'example_six');``` 
+###### Cons: 
+* It takes more time because we need to create the insert statement with the columns definied in the table in the correct order
+###### Benchmark: 
+````
+goos: darwin
+goarch: amd64
+pkg: sql-history/6.generic-with-improvement-automatized
+Benchmark-4   	       1	36915125535 ns/op
+PASS
+ok  	sql-history/6.generic-with-improvement-automatized	36.936s
+````
+
+
 
 ## Known issues
 
