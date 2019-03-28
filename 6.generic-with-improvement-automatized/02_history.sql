@@ -68,7 +68,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION history.create_history_table(_history_schema_name text, _history_table_name text, _model_schema_name text, _model_table_name text)
   RETURNS VOID AS
-$func$
+$$
 DECLARE
   _err_context text;
 BEGIN
@@ -95,9 +95,29 @@ EXCEPTION
           USING HINT = format('Check table [%s.%s]', _model_schema_name, _model_table_name),
           SCHEMA = _model_schema_name,
           TABLE = _model_table_name;
-END
+END $$
+LANGUAGE plpgsql;
 
-$func$ LANGUAGE plpgsql;
-
+CREATE OR REPLACE FUNCTION history.delete_history_table(_history_schema_name text, _history_table_name text, _model_schema_name text, _model_table_name text)
+  RETURNS VOID AS
+$$
+DECLARE
+  _err_context text;
+BEGIN
+EXECUTE format('
+  DROP TRIGGER trigger_%I_%I_history ON %I.%I;
+  DROP TABLE %s.%s;',
+      _model_schema_name, _model_table_name,
+      _model_schema_name, _model_table_name,
+ 	  _history_schema_name, _history_table_name);
+EXCEPTION
+    WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS _err_context = PG_EXCEPTION_CONTEXT;
+        RAISE EXCEPTION 'Error context: %; Error name: %; Error state: %', _err_context, SQLERRM, SQLSTATE
+          USING HINT = format('Check table [%s.%s] and trigger trigger_%I_%I_history', _model_schema_name, _model_table_name, _model_schema_name, _model_table_name),
+          SCHEMA = _model_schema_name,
+          TABLE = _model_table_name;
+END $$
+LANGUAGE plpgsql;
 
 SELECT history.create_history_table('history', 'example_six', 'model', 'example_six');
