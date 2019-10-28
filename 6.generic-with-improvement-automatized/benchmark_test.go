@@ -12,7 +12,7 @@ import (
 
 func Benchmark(b *testing.B) {
 	driver := "postgres"
-	dataSource := "postgres://postgres:postgres@localhost:7100/sixsource?sslmode=disable"
+	dataSource := "postgres://user:password@localhost:7000/postgres?sslmode=disable"
 	expectedAffectedRows := 10000
 	historySchemaName := "history"
 	historyTableName := "example_six"

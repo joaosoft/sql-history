@@ -51,7 +51,7 @@ ok  	sql-history/2.without-defining-columns	28.093s
 ###### Pros: 
 * We just need to define a trigger function  
 ###### Cons: 
-* It takes more time because we need to create the insert statement with the columns definied in the table in the correct order
+* It takes more time because we need to create the insert statement with the columns defined in the table in the correct order
 ###### Benchmark: 
 ````
 goos: darwin
@@ -82,7 +82,7 @@ ok  	sql-history/4.generic-with-improvement-with-joins 59.708s
 ###### Pros: 
 * We just need to define a trigger function  
 ###### Cons: 
-* It takes more time because we need to create the insert statement with the columns definied in the table in the correct order
+* It takes more time because we need to create the insert statement with the columns defined in the table in the correct order
 ###### Benchmark: 
 ````
 goos: darwin
@@ -98,7 +98,7 @@ ok  	sql-history/5.generic-with-improvement	36.936s
 * We just need to call a function to create the history process
 Example: ```SELECT history.create_history_table('history', 'example_six', 'model', 'example_six');``` 
 ###### Cons: 
-* It takes more time because we need to create the insert statement with the columns definied in the table in the correct order
+* It takes more time because we need to create the insert statement with the columns defined in the table in the correct order
 ###### Benchmark: 
 ````
 goos: darwin
@@ -109,7 +109,27 @@ PASS
 ok  	sql-history/6.generic-with-improvement-automatized	36.936s
 ````
 
+### 7. generic with improvements automatized json
+###### Pros: 
+* We just need to call a function to create the history process
+Example: ```SELECT history.create_history_table('history', 'example_seven', 'model', 'example_seven');``` 
+###### Cons: 
+* It takes more time because we need to create the insert statement with the columns defined in the table in the correct order
+###### Benchmark: 
+````
+goos: darwin
+goarch: amd64
+pkg: sql-history/7.generic-with-improvement-automatized-josn
+Benchmark-4   	       1	36915125535 ns/op
+PASS
+ok  	sql-history/7.generic-with-improvement-automatized-json	36.936s
+````
 
+## Running
+on each package ...
+```
+go test -bench=. > benchmark.txt
+```
 
 ## Known issues
 
